@@ -29,7 +29,7 @@ public class BetaalmethodeCreditcard extends Betaalmethode {
     @Column(name = "vervaldatum", nullable = false)
     private Date vervaldatum;
 
-    @Column(name = "cvv", nullable = false, length = 255)
+    @Column(name = "cvv", nullable = false, length = 4)
     private String cvv;
 
     public BetaalmethodeCreditcard() {}

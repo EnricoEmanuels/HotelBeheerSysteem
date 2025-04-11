@@ -21,7 +21,7 @@ public class BetaalmethodeCrypto extends Betaalmethode {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "wallet_adres", nullable = false, length = 255)
+    @Column(name = "walletadres", nullable = false, length = 255)
     private String walletAdres;
 
     @Column(name = "muntsoort", nullable = false, length = 255)

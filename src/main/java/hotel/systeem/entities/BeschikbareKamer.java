@@ -23,15 +23,21 @@ public class BeschikbareKamer {
     @Column(name = "beschikbaar", nullable = false)
     private boolean beschikbaar;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "kamer_id", referencedColumnName = "id")
+    private Kamer kamer;
+
     public BeschikbareKamer() {}
 
-    public BeschikbareKamer(int id, boolean beschikbaar) {
+    public BeschikbareKamer(int id, boolean beschikbaar, Kamer kamer) {
         this.id = id;
         this.beschikbaar = beschikbaar;
+        this.kamer = kamer;
     }
 
-    public BeschikbareKamer(boolean beschikbaar) {
+    public BeschikbareKamer(boolean beschikbaar, Kamer kamer) {
         this.beschikbaar = beschikbaar;
+        this.kamer = kamer;
     }
 
     public int getId() {
@@ -50,11 +56,20 @@ public class BeschikbareKamer {
         this.beschikbaar = beschikbaar;
     }
 
+    public Kamer getKamer() {
+        return kamer;
+    }
+
+    public void setKamer(Kamer kamer) {
+        this.kamer = kamer;
+    }
+
     @Override
     public String toString() {
         return "BeschikbareKamer{" +
                 "id=" + id +
                 ", beschikbaar=" + beschikbaar +
+                ", kamer=" + kamer +
                 '}';
     }
 }

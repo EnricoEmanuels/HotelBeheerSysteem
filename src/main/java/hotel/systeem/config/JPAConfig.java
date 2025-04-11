@@ -16,7 +16,7 @@ public class JPAConfig {
 
     public static EntityManagerFactory getEntityMangerFactory(){
         if (emf == null ) {
-            emf = Persistence.createEntityManagerFactory("CoolFlow");
+            emf = Persistence.createEntityManagerFactory("HotelBeheerSysteem");
         }
         return emf;
     }

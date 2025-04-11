@@ -10,11 +10,13 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import hotel.systeem.entities.KamersBoeken;
+
 @Entity
 @Table(name = "betaalmethode" , schema = "hotelbeheersysteem")
 
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Betaalmethode {
+public class Betaalmethode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,6 +29,22 @@ public abstract class Betaalmethode {
     @Column(name = "datum", nullable = false)
     private Date datum;
 
+
+    @ManyToOne( optional = false)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "klant_id", nullable = false)
+    private Klant klant;
+
+    @ManyToOne( optional = false)
+    @JoinColumn(name = "betaalmethode_id", nullable = false)
+    private Betaalmethode betaalmethode;
+
+//    @OneToMany(mappedBy = "klant", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<Bestelling> bestellingen = new HashSet<>();
+
+    @OneToMany(mappedBy = "betaalmethodes", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<KamersBoeken> kamersBoeken = new HashSet<>();
+
     public enum MethodeType {
         CRYPTO, CREDITCARD, CONTANT
     }
@@ -35,15 +53,20 @@ public abstract class Betaalmethode {
 
     }
 
-    public Betaalmethode(Integer id, MethodeType methode, Date datum) {
+
+    public Betaalmethode(Integer id, MethodeType methode, Date datum, Klant klant, Betaalmethode betaalmethode) {
         this.id = id;
         this.methode = methode;
         this.datum = datum;
+        this.klant = klant;
+        this.betaalmethode = betaalmethode;
     }
 
-    public Betaalmethode(MethodeType methode, Date datum) {
+    public Betaalmethode(MethodeType methode, Date datum, Klant klant, Betaalmethode betaalmethode) {
         this.methode = methode;
         this.datum = datum;
+        this.klant = klant;
+        this.betaalmethode = betaalmethode;
     }
 
     public Integer getId() {
@@ -70,12 +93,38 @@ public abstract class Betaalmethode {
         this.datum = datum;
     }
 
+    public Klant getKlant() {
+        return klant;
+    }
+
+    public void setKlant(Klant klant) {
+        this.klant = klant;
+    }
+
+    public Betaalmethode getBetaalmethode() {
+        return betaalmethode;
+    }
+
+    public void setBetaalmethode(Betaalmethode betaalmethode) {
+        this.betaalmethode = betaalmethode;
+    }
+
+    public Set<KamersBoeken> getKamersBoeken() {
+        return kamersBoeken;
+    }
+
+    public void setKamersBoeken(Set<KamersBoeken> kamersBoeken) {
+        this.kamersBoeken = kamersBoeken;
+    }
+
     @Override
     public String toString() {
         return "Betaalmethode{" +
                 "id=" + id +
                 ", methode=" + methode +
                 ", datum=" + datum +
+                ", klant=" + klant +
+                ", betaalmethode=" + betaalmethode +
                 '}';
     }
 }

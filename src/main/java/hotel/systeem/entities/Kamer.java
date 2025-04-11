@@ -18,7 +18,6 @@ public class Kamer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-
     private int id;
 
     @Enumerated(EnumType.STRING)
@@ -82,6 +81,8 @@ public class Kamer {
     public void setPrijsPerMaand(double prijsPerMaand) {
         this.prijsPerMaand = prijsPerMaand;
     }
+
+
 
     @Override
     public String toString() {

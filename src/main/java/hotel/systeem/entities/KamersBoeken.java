@@ -12,6 +12,7 @@ import java.util.Set;
 
 import hotel.systeem.entities.Klant;
 import hotel.systeem.entities.Kamer;
+import hotel.systeem.entities.Betaalmethode;
 
 @Entity
 public class KamersBoeken {
@@ -38,30 +39,39 @@ public class KamersBoeken {
     private Klant klant;
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "klant_id", referencedColumnName = "id")
-//    @Column(name = "kamer_id", nullable = false)
-    private Kamer kamer;
+    @JoinColumn(name = "beschikbarekamer_id", referencedColumnName = "id")
+    private BeschikbareKamer beschikbareKamer;
+
+//    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "betaalmethode_id", referencedColumnName = "id")
+
+
+    @ManyToOne(optional = false , fetch = FetchType.EAGER)
+    @JoinColumn(name = "betaalmethode_id", nullable = false)
+    private Betaalmethode betaalmethodes;
 
     public KamersBoeken() {}
 
 
-    public KamersBoeken(int id, Date startdatum, Date einddatum, double totaalbedrag, boolean betaald, Klant klant, Kamer kamer) {
+    public KamersBoeken(int id, Date startdatum, Date einddatum, double totaalbedrag, boolean betaald, Klant klant , BeschikbareKamer beschikbareKamer, Betaalmethode betaalmethodes) {
         this.id = id;
         this.startdatum = startdatum;
         this.einddatum = einddatum;
         this.totaalbedrag = totaalbedrag;
         this.betaald = betaald;
         this.klant = klant;
-        this.kamer = kamer;
+        this.beschikbareKamer = beschikbareKamer;
+        this.betaalmethodes = betaalmethodes;
     }
 
-    public KamersBoeken(Date startdatum, Date einddatum, double totaalbedrag, boolean betaald, Klant klant, Kamer kamer) {
+    public KamersBoeken(Date startdatum, Date einddatum, double totaalbedrag, boolean betaald, Klant klant , BeschikbareKamer beschikbareKamer, Betaalmethode betaalmethodes) {
         this.startdatum = startdatum;
         this.einddatum = einddatum;
         this.totaalbedrag = totaalbedrag;
         this.betaald = betaald;
         this.klant = klant;
-        this.kamer = kamer;
+        this.beschikbareKamer = beschikbareKamer;
+        this.betaalmethodes = betaalmethodes;
     }
 
 
@@ -115,15 +125,38 @@ public class KamersBoeken {
         this.klant = klant;
     }
 
-    public Kamer getKamer() {
-        return kamer;
+//    public Kamer getKamer() {
+//        return kamer;
+//    }
+//
+//    public void setKamer(Kamer kamer) {
+//        this.kamer = kamer;
+//    }
+
+    public BeschikbareKamer getBeschikbareKamer() {
+        return beschikbareKamer;
     }
 
-    public void setKamer(Kamer kamer) {
-        this.kamer = kamer;
+    public void setBeschikbareKamer(BeschikbareKamer beschikbareKamer) {
+        this.beschikbareKamer = beschikbareKamer;
     }
 
+//    public Betaalmethode getHuidigebetaalmethodes() {
+//        return huidigebetaalmethodes;
+//    }
+//
+//    public void setHuidigebetaalmethodes(Betaalmethode huidigebetaalmethodes) {
+//        this.huidigebetaalmethodes = huidigebetaalmethodes;
+//    }
 
+
+    public Betaalmethode getBetaalmethodes() {
+        return betaalmethodes;
+    }
+
+    public void setBetaalmethodes(Betaalmethode betaalmethodes) {
+        this.betaalmethodes = betaalmethodes;
+    }
 
     @Override
     public String toString() {
@@ -134,7 +167,8 @@ public class KamersBoeken {
                 ", totaalbedrag=" + totaalbedrag +
                 ", betaald=" + betaald +
                 ", klant=" + klant +
-                ", kamer=" + kamer +
+                ", beschikbareKamer=" + beschikbareKamer +
+                ", betaalmethodes=" + betaalmethodes +
                 '}';
     }
 }

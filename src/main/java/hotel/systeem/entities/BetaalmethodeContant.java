@@ -17,8 +17,9 @@ public class BetaalmethodeContant extends Betaalmethode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-
     private Integer id;
+
+    @Column(name = "valuta", nullable = false, length = 255)
     private String valuta;
 
     public BetaalmethodeContant() {}
