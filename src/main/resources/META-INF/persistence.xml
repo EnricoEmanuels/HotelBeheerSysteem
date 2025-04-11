@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
+             version="3.2">
+    <persistence-unit name="default">
+
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>hotel.systeem.entities.Betaalmethode</class>
+        <class>hotel.systeem.entities.BeschikbareKamer</class>
+        <class>hotel.systeem.entities.BetaalmethodeContant</class>
+        <class>hotel.systeem.entities.BetaalmethodeCreditcard</class>
+        <class>hotel.systeem.entities.BetaalmethodeCrypto</class>
+        <class>hotel.systeem.entities.Kamer</class>
+        <class>hotel.systeem.entities.KamersBoeken</class>
+        <class>hotel.systeem.entities.Klant</class>
+
+        <properties>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/hotelbeheersysteem"/>
+            <property name="jakarta.persistence.jdbc.user" value="root"/>
+            <property name="jakarta.persistence.jdbc.password" value="e9n4r2i0c0"/>
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+
+
+
+
+
+
+    </persistence-unit>
+</persistence>

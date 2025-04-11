@@ -1,0 +1,95 @@
+package hotel.systeem.entities;
+
+import jakarta.persistence.*;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+
+@Entity
+@Table(name = "kamer" , schema = "hotelbeheersysteem")
+
+public class Kamer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+
+    private int id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "kamertype", nullable = false)
+    private KamerType kamertype;
+
+    @Column(name = "aantalbedden", nullable = false)
+    private int aantalbedden;
+
+    @Column(name = "prijspermaand", nullable = false)
+    private double prijsPerMaand;
+
+    public enum KamerType {
+        GOEDKOOP, NORMAAL, DEFTIG
+    }
+
+    public Kamer() {}
+
+
+    public Kamer(int id, KamerType kamertype, int aantalbedden, double prijsPerMaand) {
+        this.id = id;
+        this.kamertype = kamertype;
+        this.aantalbedden = aantalbedden;
+        this.prijsPerMaand = prijsPerMaand;
+    }
+
+    public Kamer(KamerType kamertype, int aantalbedden, double prijsPerMaand) {
+        this.kamertype = kamertype;
+        this.aantalbedden = aantalbedden;
+        this.prijsPerMaand = prijsPerMaand;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public KamerType getKamertype() {
+        return kamertype;
+    }
+
+    public void setKamertype(KamerType kamertype) {
+        this.kamertype = kamertype;
+    }
+
+    public int getAantalbedden() {
+        return aantalbedden;
+    }
+
+    public void setAantalbedden(int aantalbedden) {
+        this.aantalbedden = aantalbedden;
+    }
+
+    public double getPrijsPerMaand() {
+        return prijsPerMaand;
+    }
+
+    public void setPrijsPerMaand(double prijsPerMaand) {
+        this.prijsPerMaand = prijsPerMaand;
+    }
+
+    @Override
+    public String toString() {
+        return "Kamer{" +
+                "id=" + id +
+                ", kamertype=" + kamertype +
+                ", aantalbedden=" + aantalbedden +
+                ", prijsPerMaand=" + prijsPerMaand +
+                '}';
+    }
+}
