@@ -1,0 +1,93 @@
+Exception in thread "main" java.lang.NoClassDefFoundError: jakarta/persistence/CheckConstraint
+	at org.hibernate.boot.models.JpaAnnotations.<clinit>(JpaAnnotations.java:230)
+	at org.hibernate.boot.models.internal.OrmAnnotationHelper.forEachOrmAnnotation(OrmAnnotationHelper.java:40)
+	at org.hibernate.boot.models.internal.ModelsHelper.preFillRegistries(ModelsHelper.java:25)
+	at org.hibernate.models.internal.SourceModelBuildingContextImpl.primeRegistries(SourceModelBuildingContextImpl.java:87)
+	at org.hibernate.models.internal.SourceModelBuildingContextImpl.<init>(SourceModelBuildingContextImpl.java:48)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.createModelBuildingContext(InFlightMetadataCollectorImpl.java:233)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.<init>(InFlightMetadataCollectorImpl.java:223)
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:197)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.metadata(EntityManagerFactoryBuilderImpl.java:1429)
+	at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:1500)
+	at org.hibernate.jpa.HibernatePersistenceProvider.createEntityManagerFactory(HibernatePersistenceProvider.java:59)
+	at jakarta.persistence.Persistence.createEntityManagerFactory(Persistence.java:80)
+	at jakarta.persistence.Persistence.createEntityManagerFactory(Persistence.java:55)
+	at hotel.systeem.config.JPAConfig.getEntityMangerFactory(JPAConfig.java:19)
+	at hotel.systeem.app.Applicatie.main(Applicatie.java:25)
+Caused by: java.lang.ClassNotFoundException: jakarta.persistence.CheckConstraint
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)
+	... 15 more
+
+Process finished with exit code 1
+
+oplossing
+
+Wat is CheckConstraint?
+Dit is een nieuwe feature van Jakarta Persistence API 3.1. Maar jouw huidige Hibernate versie (7.0.0.Beta1) verwacht waarschijnlijk een volledige en compatibele versie van de Jakarta Persistence API 3.1, en daar lijkt iets mis te gaan. De class CheckConstraint zit er dus niet in of wordt niet gevonden.
+
+Oplossing in 2 stappen
+Stap 1: Downgrade Hibernate
+Gebruik een stabiele en compatibele versie zoals Hibernate 6.3.1.Final. De 7.0.0.Beta1 die jij nu gebruikt is nog in beta, en niet geschikt voor productie. Vervang dus in je pom.xml deze dependency:
+
+xml
+Copy
+Edit
+<dependency>
+    <groupId>org.hibernate.orm</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>7.0.0.Beta1</version>
+</dependency>
+met deze stabiele versie:
+
+xml
+Copy
+Edit
+<dependency>
+    <groupId>org.hibernate.orm</groupId>
+    <artifactId>hibernate-core</artifactId>
+    <version>6.3.1.Final</version>
+</dependency>
+Stap 2: Verwijder eventueel gebruik van CheckConstraint
+Controleer of jij of één van je libraries toevallig ergens een @CheckConstraint gebruikt in je entity classes (of in een auto gegenereerde class). Die moet je weghalen óf wachten tot een stabiele Jakarta Persistence versie die dat ondersteunt.
+
+Extra Tip
+Verwijder even je .m2/repository/org/hibernate folder (om de oude versies echt te wissen), en doe daarna:
+
+bash
+Copy
+Edit
+mvn clean install
+Of klik gewoon op "Reload All Maven Projects" in IntelliJ na het aanpassen van je pom.xml.
+
+2de error naar het veranderen van die hibernate core dependency
+
+Exception in thread "main" jakarta.persistence.PersistenceException: Unable to locate persistence units
+	at org.hibernate.jpa.HibernatePersistenceProvider.getEntityManagerFactoryBuilderOrNull(HibernatePersistenceProvider.java:83)
+	at org.hibernate.jpa.HibernatePersistenceProvider.getEntityManagerFactoryBuilderOrNull(HibernatePersistenceProvider.java:59)
+	at org.hibernate.jpa.HibernatePersistenceProvider.createEntityManagerFactory(HibernatePersistenceProvider.java:50)
+	at jakarta.persistence.Persistence.createEntityManagerFactory(Persistence.java:80)
+	at jakarta.persistence.Persistence.createEntityManagerFactory(Persistence.java:55)
+	at hotel.systeem.config.JPAConfig.getEntityMangerFactory(JPAConfig.java:19)
+	at hotel.systeem.app.Applicatie.main(Applicatie.java:25)
+Caused by: java.lang.IllegalArgumentException: Unrecognized JPA persistence.xml XSD version : `3.2`
+	at org.hibernate.boot.xsd.ConfigXsdSupport.jpaXsd(ConfigXsdSupport.java:68)
+	at org.hibernate.jpa.boot.internal.PersistenceXmlParser.validate(PersistenceXmlParser.java:506)
+	at org.hibernate.jpa.boot.internal.PersistenceXmlParser.loadUrl(PersistenceXmlParser.java:475)
+	at org.hibernate.jpa.boot.internal.PersistenceXmlParser.parsePersistenceXml(PersistenceXmlParser.java:246)
+	at org.hibernate.jpa.boot.internal.PersistenceXmlParser.parsePersistenceXml(PersistenceXmlParser.java:237)
+	at org.hibernate.jpa.boot.internal.PersistenceXmlParser.doResolve(PersistenceXmlParser.java:231)
+	at org.hibernate.jpa.boot.internal.PersistenceXmlParser.locatePersistenceUnits(PersistenceXmlParser.java:69)
+	at org.hibernate.jpa.HibernatePersistenceProvider.getEntityManagerFactoryBuilderOrNull(HibernatePersistenceProvider.java:79)
+	... 6 more
+
+	oplossing  die persistence heb ik die 3.2 verandert naar 3.1 (werkt nu )
+	dit toegevoegd in die persistemce transaction-type="RESOURCE_LOCAL"
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
+             version="3.1">
+    <persistence-unit name="HotelBeheerSysteem" transaction-type="RESOURCE_LOCAL">

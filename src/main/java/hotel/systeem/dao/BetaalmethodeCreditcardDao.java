@@ -1,22 +1,22 @@
 package hotel.systeem.dao;
 
-import hotel.systeem.entities.BetaalmethodeContant;
+import hotel.systeem.entities.BetaalmethodeCreditcard;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public class BetaalmethodeContantDao {
+public class BetaalmethodeCreditcardDao {
     private EntityManager entityManager;
 
-    public BetaalmethodeContantDao(EntityManager entityManager) {
+    public BetaalmethodeCreditcardDao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public void save(BetaalmethodeContant betaalmethodeContant) {
+    public void save(BetaalmethodeCreditcard betaalmethodeCreditcard) {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
             transaction.begin();
-            entityManager.persist(betaalmethodeContant);
+            entityManager.persist(betaalmethodeCreditcard);
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();

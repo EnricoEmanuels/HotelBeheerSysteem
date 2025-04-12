@@ -35,7 +35,8 @@ public class Betaalmethode {
     @JoinColumn(name = "klant_id", nullable = false)
     private Klant klant;
 
-    @ManyToOne( optional = false)
+//    @ManyToOne( optional = false)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "betaalmethode_id", nullable = false)
     private Betaalmethode betaalmethode;
 

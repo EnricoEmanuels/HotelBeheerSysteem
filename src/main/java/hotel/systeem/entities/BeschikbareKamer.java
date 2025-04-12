@@ -20,8 +20,8 @@ public class BeschikbareKamer {
     @Column(name = "id", nullable = false)
     private int id;
 
-    @Column(name = "beschikbaar", nullable = false)
-    private boolean beschikbaar;
+    @Column(name = "beschikbaar", nullable = false, length = 255)
+    private String beschikbaar;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "kamer_id", referencedColumnName = "id")
@@ -29,13 +29,13 @@ public class BeschikbareKamer {
 
     public BeschikbareKamer() {}
 
-    public BeschikbareKamer(int id, boolean beschikbaar, Kamer kamer) {
+    public BeschikbareKamer(int id, String beschikbaar, Kamer kamer) {
         this.id = id;
         this.beschikbaar = beschikbaar;
         this.kamer = kamer;
     }
 
-    public BeschikbareKamer(boolean beschikbaar, Kamer kamer) {
+    public BeschikbareKamer(String beschikbaar, Kamer kamer) {
         this.beschikbaar = beschikbaar;
         this.kamer = kamer;
     }
@@ -48,11 +48,11 @@ public class BeschikbareKamer {
         this.id = id;
     }
 
-    public boolean isBeschikbaar() {
+    public String isBeschikbaar() {
         return beschikbaar;
     }
 
-    public void setBeschikbaar(boolean beschikbaar) {
+    public void setBeschikbaar(String beschikbaar) {
         this.beschikbaar = beschikbaar;
     }
 
