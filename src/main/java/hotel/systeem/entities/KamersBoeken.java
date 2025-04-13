@@ -19,7 +19,7 @@ public class KamersBoeken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "startdatum", nullable = false)
     private Date startdatum;
@@ -30,16 +30,18 @@ public class KamersBoeken {
     @Column(name = "totaalbedrag", nullable = false)
     private double totaalbedrag;
 
-    @Column(name = "betaald", nullable = false)
-    private boolean betaald;
+    @Column(name = "betaald", nullable = false, length = 10)
+    private String betaald;
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "klant_id", referencedColumnName = "id")
 //    @Column(name = "klant_id", nullable = false)
     private Klant klant;
 
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "beschikbarekamer_id", referencedColumnName = "id")
+//    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "beschikbarekamer_id", nullable = false , referencedColumnName = "id")
     private BeschikbareKamer beschikbareKamer;
 
 //    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
@@ -53,7 +55,7 @@ public class KamersBoeken {
     public KamersBoeken() {}
 
 
-    public KamersBoeken(int id, Date startdatum, Date einddatum, double totaalbedrag, boolean betaald, Klant klant , BeschikbareKamer beschikbareKamer, Betaalmethode betaalmethodes) {
+    public KamersBoeken(Integer id, Date startdatum, Date einddatum, double totaalbedrag, String betaald, Klant klant , BeschikbareKamer beschikbareKamer, Betaalmethode betaalmethodes) {
         this.id = id;
         this.startdatum = startdatum;
         this.einddatum = einddatum;
@@ -64,7 +66,7 @@ public class KamersBoeken {
         this.betaalmethodes = betaalmethodes;
     }
 
-    public KamersBoeken(Date startdatum, Date einddatum, double totaalbedrag, boolean betaald, Klant klant , BeschikbareKamer beschikbareKamer, Betaalmethode betaalmethodes) {
+    public KamersBoeken(Date startdatum, Date einddatum, double totaalbedrag, String betaald, Klant klant , BeschikbareKamer beschikbareKamer, Betaalmethode betaalmethodes) {
         this.startdatum = startdatum;
         this.einddatum = einddatum;
         this.totaalbedrag = totaalbedrag;
@@ -77,11 +79,11 @@ public class KamersBoeken {
 
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -109,11 +111,11 @@ public class KamersBoeken {
         this.totaalbedrag = totaalbedrag;
     }
 
-    public boolean isBetaald() {
+    public String isBetaald() {
         return betaald;
     }
 
-    public void setBetaald(boolean betaald) {
+    public void setBetaald(String betaald) {
         this.betaald = betaald;
     }
 
@@ -157,6 +159,12 @@ public class KamersBoeken {
     public void setBetaalmethodes(Betaalmethode betaalmethodes) {
         this.betaalmethodes = betaalmethodes;
     }
+
+    public String getBetaald() {
+        return betaald;
+    }
+
+
 
     @Override
     public String toString() {

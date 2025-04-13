@@ -19,7 +19,7 @@ import hotel.systeem.entities.KamersBoeken;
 public class Betaalmethode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+//    @Column(name = "id", nullable = false)
     private Integer id;
 
     @Enumerated(EnumType.STRING)
@@ -36,9 +36,9 @@ public class Betaalmethode {
     private Klant klant;
 
 //    @ManyToOne( optional = false)
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "betaalmethode_id", nullable = false)
-    private Betaalmethode betaalmethode;
+//    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "betaalmethode_id", nullable = false)
+//    private Betaalmethode betaalmethode;
 
 //    @OneToMany(mappedBy = "klant", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private Set<Bestelling> bestellingen = new HashSet<>();
@@ -47,27 +47,27 @@ public class Betaalmethode {
     private Set<KamersBoeken> kamersBoeken = new HashSet<>();
 
     public enum MethodeType {
-        CRYPTO, CREDITCARD, CONTANT
-    }
+        crypto, creditcard, contant
+    } // je moet klein letter gebruiken voor je enums anders want het wordt als kleinletter opgeslagen en als je ze
+    // weer wilt oproepen ga je errors krijgen want java is CASE Sensitive SQL (crypto) en JAVA (CRYPTO) is niet hetzelfde
 
     public Betaalmethode() {
 
     }
 
 
-    public Betaalmethode(Integer id, MethodeType methode, Date datum, Klant klant, Betaalmethode betaalmethode) {
+    public Betaalmethode(Integer id, MethodeType methode, Date datum, Klant klant) {
         this.id = id;
         this.methode = methode;
         this.datum = datum;
         this.klant = klant;
-        this.betaalmethode = betaalmethode;
     }
 
-    public Betaalmethode(MethodeType methode, Date datum, Klant klant, Betaalmethode betaalmethode) {
+    public Betaalmethode(MethodeType methode, Date datum, Klant klant) {
         this.methode = methode;
         this.datum = datum;
         this.klant = klant;
-        this.betaalmethode = betaalmethode;
+
     }
 
     public Integer getId() {
@@ -102,13 +102,7 @@ public class Betaalmethode {
         this.klant = klant;
     }
 
-    public Betaalmethode getBetaalmethode() {
-        return betaalmethode;
-    }
 
-    public void setBetaalmethode(Betaalmethode betaalmethode) {
-        this.betaalmethode = betaalmethode;
-    }
 
     public Set<KamersBoeken> getKamersBoeken() {
         return kamersBoeken;
@@ -125,7 +119,7 @@ public class Betaalmethode {
                 ", methode=" + methode +
                 ", datum=" + datum +
                 ", klant=" + klant +
-                ", betaalmethode=" + betaalmethode +
+                ", kamersBoeken=" + kamersBoeken +
                 '}';
     }
 }

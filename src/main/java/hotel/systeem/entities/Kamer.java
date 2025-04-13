@@ -31,8 +31,10 @@ public class Kamer {
     private double prijsPerMaand;
 
     public enum KamerType {
-        GOEDKOOP, NORMAAL, DEFTIG
-    }
+        goedkoop, normaal, deftig
+    } // enums met kleinletter want ze worden met kleinletters opgeslagen dus dan moet je ook kleinletters gebruiken in JAVA
+    // want als je die informatie wilt ophalen kan je errors krijgem als van java met hoofdletter is en
+    // van sql kleinletter is
 
     public Kamer() {}
 

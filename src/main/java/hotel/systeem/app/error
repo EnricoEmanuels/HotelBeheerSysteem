@@ -1,0 +1,21 @@
+Converting `org.hibernate.id.IdentifierGenerationException` to JPA `PersistenceException` : attempted to assign id from null one-to-one property [hotel.systeem.entities.BetaalmethodeCrypto.betaalmethode]
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:165)
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:175)
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:182)
+	at org.hibernate.internal.SessionImpl.firePersist(SessionImpl.java:739)
+	at org.hibernate.internal.SessionImpl.persist(SessionImpl.java:717)
+	at hotel.systeem.dao.BetaalmethodeCryptoDao.save(BetaalmethodeCryptoDao.java:19)
+	at hotel.systeem.app.Applicatie.main(Applicatie.java:112)
+Caused by: org.hibernate.id.IdentifierGenerationException: attempted to assign id from null one-to-one property [hotel.systeem.entities.BetaalmethodeCrypto.betaalmethode]
+	at org.hibernate.id.ForeignGenerator.generate(ForeignGenerator.java:90)
+	at org.hibernate.event.internal.AbstractSaveEventListener.saveWithGeneratedId(AbstractSaveEventListener.java:114)
+	at org.hibernate.event.internal.DefaultPersistEventListener.entityIsTransient(DefaultPersistEventListener.java:184)
+	at org.hibernate.event.internal.DefaultPersistEventListener.onPersist(DefaultPersistEventListener.java:129)
+	at org.hibernate.event.internal.DefaultPersistEventListener.onPersist(DefaultPersistEventListener.java:53)
+	at org.hibernate.event.service.internal.EventListenerGroupImpl.fireEventOnEachListener(EventListenerGroupImpl.java:107)
+	at org.hibernate.internal.SessionImpl.firePersist(SessionImpl.java:733)
+	... 3 more
+Apr 12, 2025 8:08:27 PM org.hibernate.engine.jdbc.
+
+
+ik denk dat ik weer een variabel zal creeren met die id erin zodat ik uiteindelijk het kan opslaan in die crypto

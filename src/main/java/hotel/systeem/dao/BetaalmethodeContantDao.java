@@ -20,8 +20,20 @@ public class BetaalmethodeContantDao {
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
+            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
         }
         System.out.println("Succesvol ingevoegd");
+    }
+
+    public BetaalmethodeContant findById(Integer id) {
+        BetaalmethodeContant betaalmethodeContant = null;
+        try {
+            betaalmethodeContant = entityManager.find(BetaalmethodeContant.class, id); // Zoek de klant via ID
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Informatie van deze succesvol opgehaald");
+        return betaalmethodeContant;
 
     }
 }

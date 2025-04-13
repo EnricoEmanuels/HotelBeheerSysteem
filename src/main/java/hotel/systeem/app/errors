@@ -91,3 +91,12 @@ Caused by: java.lang.IllegalArgumentException: Unrecognized JPA persistence.xml 
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
              version="3.1">
     <persistence-unit name="HotelBeheerSysteem" transaction-type="RESOURCE_LOCAL">
+
+
+                /* het gaat niet het zegt dit Apr 11, 2025 10:15:36 PM org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl getIsolatedConnection
+                INFO: HHH10001501: Connection obtained from JdbcConnectionAccess [org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess@54e43bfe] for (non-JTA) DDL execution was not in auto-commit mode; the Connection 'local transaction' will be committed and the Connection will be set into auto-commit mode.
+                Apr 11, 2025 10:15:36 PM org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator initiateService
+                INFO: HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+                Succesvol ingevoegd
+                Apr 11, 2025 10:15:36 PM org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl$PoolState stop
+                INFO: HHH10001008: Cleaning up connection pool [jdbc:mysql://localhost:3306/hotelbeheersysteem] */

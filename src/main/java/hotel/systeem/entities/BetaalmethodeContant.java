@@ -11,13 +11,18 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "betaalmethode_contant" , schema = "hotelbeheersysteem")
+@Table(name = "betaalmethodecontant" , schema = "hotelbeheersysteem")
 
-public class BetaalmethodeContant extends Betaalmethode {
+public class BetaalmethodeContant {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY) Handmatig die ID zetten van die methode als ze kiezen voor contant in die ENUM
+//    @Column(name = "id", nullable = false)
     private Integer id;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private Betaalmethode betaalmethode;
 
     @Column(name = "valuta", nullable = false, length = 255)
     private String valuta;
@@ -28,19 +33,15 @@ public class BetaalmethodeContant extends Betaalmethode {
         this.id = id;
         this.valuta = valuta;
     }
+
+    public BetaalmethodeContant(Betaalmethode betaalmethode, String valuta) {
+        this.betaalmethode = betaalmethode;
+        this.valuta = valuta;
+    }
     public BetaalmethodeContant(String valuta) {
         this.valuta = valuta;
     }
 
-    @Override
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getValuta() {
         return valuta;
@@ -50,10 +51,28 @@ public class BetaalmethodeContant extends Betaalmethode {
         this.valuta = valuta;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Betaalmethode getBetaalmethode() {
+        return betaalmethode;
+    }
+
+    public void setBetaalmethode(Betaalmethode betaalmethode) {
+        this.betaalmethode = betaalmethode;
+    }
+
+
     @Override
     public String toString() {
         return "BetaalmethodeContant{" +
                 "id=" + id +
+                ", betaalmethode=" + betaalmethode +
                 ", valuta='" + valuta + '\'' +
                 '}';
     }

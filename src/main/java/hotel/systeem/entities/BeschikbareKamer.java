@@ -18,7 +18,7 @@ public class BeschikbareKamer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "beschikbaar", nullable = false, length = 255)
     private String beschikbaar;
@@ -29,7 +29,7 @@ public class BeschikbareKamer {
 
     public BeschikbareKamer() {}
 
-    public BeschikbareKamer(int id, String beschikbaar, Kamer kamer) {
+    public BeschikbareKamer(Integer id, String beschikbaar, Kamer kamer) {
         this.id = id;
         this.beschikbaar = beschikbaar;
         this.kamer = kamer;
@@ -40,11 +40,11 @@ public class BeschikbareKamer {
         this.kamer = kamer;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

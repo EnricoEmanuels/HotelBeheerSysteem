@@ -20,8 +20,20 @@ public class BeschikbareKamerDao {
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
+            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
         }
         System.out.println("Succesvol ingevoegd");
+    }
+
+    public BeschikbareKamer findById(Integer id) {
+        BeschikbareKamer beschikbareKamer = null;
+        try {
+            beschikbareKamer = entityManager.find(BeschikbareKamer.class, id); // Zoek de klant via ID
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Informatie van deze succesvol opgehaald");
+        return beschikbareKamer;
 
     }
 }

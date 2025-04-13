@@ -12,13 +12,18 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "betaalmethode_creditcard" , schema = "hotelbeheersysteem")
+@Table(name = "betaalmethodecreditcard" , schema = "hotelbeheersysteem")
 
-public class BetaalmethodeCreditcard extends Betaalmethode {
+public class BetaalmethodeCreditcard {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY) je moet handmatig die gegenereerde ID van betaalmethode plaatsen als ze voor creditcard kiezen bij die betaalmethode ENUM
+//    @Column(name = "id", nullable = false)
     private Integer id;
+
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private Betaalmethode betaalmethode;
 
     @Column(name = "volledigenaam", nullable = false, length = 255)
     private String volledigeNaam;
@@ -41,21 +46,19 @@ public class BetaalmethodeCreditcard extends Betaalmethode {
         this.vervaldatum = vervaldatum;
         this.cvv = cvv;
     }
-    public BetaalmethodeCreditcard(String volledigeNaam, String kaartnummer, Date vervaldatum, String cvv) {
+
+    public BetaalmethodeCreditcard(Betaalmethode betaalmethode, String volledigeNaam, String kaartnummer, Date vervaldatum, String cvv) {
+        this.betaalmethode = betaalmethode;
         this.volledigeNaam = volledigeNaam;
         this.kaartnummer = kaartnummer;
         this.vervaldatum = vervaldatum;
         this.cvv = cvv;
     }
-
-    @Override
-    public Integer getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
+    public BetaalmethodeCreditcard(String volledigeNaam, String kaartnummer, Date vervaldatum, String cvv) {
+        this.volledigeNaam = volledigeNaam;
+        this.kaartnummer = kaartnummer;
+        this.vervaldatum = vervaldatum;
+        this.cvv = cvv;
     }
 
     public String getVolledigeNaam() {
@@ -90,10 +93,29 @@ public class BetaalmethodeCreditcard extends Betaalmethode {
         this.cvv = cvv;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Betaalmethode getBetaalmethode() {
+        return betaalmethode;
+    }
+
+    public void setBetaalmethode(Betaalmethode betaalmethode) {
+        this.betaalmethode = betaalmethode;
+    }
+
+
+
     @Override
     public String toString() {
         return "BetaalmethodeCreditcard{" +
                 "id=" + id +
+                ", betaalmethode=" + betaalmethode +
                 ", volledigeNaam='" + volledigeNaam + '\'' +
                 ", kaartnummer='" + kaartnummer + '\'' +
                 ", vervaldatum=" + vervaldatum +
