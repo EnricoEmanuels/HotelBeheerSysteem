@@ -164,7 +164,19 @@ public class KamersBoeken {
         return betaald;
     }
 
-
+//    @Override
+//    public String toString() {
+//        return "KamersBoeken{" +
+//                "id=" + id +
+//                ", startdatum=" + startdatum +
+//                ", einddatum=" + einddatum +
+//                ", totaalbedrag=" + totaalbedrag +
+//                ", betaald='" + betaald + '\'' +
+//                ", klant=" + klant +
+//                ", beschikbareKamer=" + beschikbareKamer +
+//                ", betaalmethodes=" + betaalmethodes +
+//                '}';
+//    }
 
     @Override
     public String toString() {
@@ -173,10 +185,26 @@ public class KamersBoeken {
                 ", startdatum=" + startdatum +
                 ", einddatum=" + einddatum +
                 ", totaalbedrag=" + totaalbedrag +
-                ", betaald=" + betaald +
-                ", klant=" + klant +
-                ", beschikbareKamer=" + beschikbareKamer +
-                ", betaalmethodes=" + betaalmethodes +
+                ", betaald='" + betaald + '\'' +
+                ", klant=" + (klant != null ? klant.getId() : null) +
+                ", beschikbareKamer=" + (beschikbareKamer != null ? beschikbareKamer.getId() : null)  +
+                ", betaalmethodes=" + (betaalmethodes != null ? betaalmethodes.getId() : null) +
                 '}';
     }
+
+    /*
+
+    @Override
+    public String toString() {
+        return "Klant{" +
+                "id=" + id +
+                ", voornaam='" + voornaam + '\'' +
+                ", achternaam='" + achternaam + '\'' +
+                ", creditcardnummer='" + creditcardnummer + '\'' +
+                ", product=" + (product != null ? product.getId() : null) +
+                ", leverancier=" + (leverancier != null ? leverancier.getId() : null) +
+                '}';
+    }
+
+    */
 }

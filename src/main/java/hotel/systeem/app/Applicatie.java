@@ -109,7 +109,14 @@ public class Applicatie {
             // en een nieuwe foreign key maken voor betaalmethode
             //
             //
-            //
+
+            //            betaalmethodeContantDao.save(betaalmethodeContant1); // het zegt het is succesvol gegaan maar het komt niet voor in de datase bij alle subsclassen
+
+
+
+            // Alle save methodes werken perfect
+
+
 //            klantDao.save(klant1); // succes
 //            klantDao.save(klant2); // succes
 
@@ -138,25 +145,94 @@ public class Applicatie {
 //            betaalmethodeCreditcardDao.save(betaalmethodeCreditcard1); // werkt perfect
 
 //            betaalmethodeContantDao.save(betaalmethodeContant1); // werkt perfect
-            System.out.println(beschikbareKamerDao.findById(1)); // werkt
 
-            kamersBoekenDao.save(kamersBoeken1); // eindelijk werkt
+//            System.out.println(beschikbareKamerDao.findById(1)); // werkt
+
+//            kamersBoekenDao.save(kamersBoeken1); // eindelijk werkt
+
+            // alle findbyID werken
+
+//            System.out.println(klantDao.findById(2)); // werkt
+//            System.out.println(kamersBoekenDao.findById(1)); // werkt ik moest die tostring aanpassen bij die foreign keys
+//            System.out.println(kamerDao.findById(3)); // werkt
+//            System.out.println(betaalmethodeDao.findById(3)); // perfect
+//            System.out.println(betaalmethodeCryptoDao.findById(1)); // werkt
+//            System.out.println(betaalmethodeCreditcardDao.findById(3)); //werkt
+//            System.out.println(betaalmethodeContantDao.findById(2)); // werkt
+//            System.out.println(beschikbareKamerDao.findById(1)); // perfect
+
+            // alle findAll werken
+//            System.out.println(klantDao.findAll()); // werkt
+//            System.out.println(kamersBoekenDao.findAll()); // werkt
+//            System.out.println(kamerDao.findAll()); // werkt
+//            System.out.println(betaalmethodeDao.findAll()); // werrkt
+//            System.out.println(betaalmethodeCryptoDao.findAll()); //werkt
+//            System.out.println(betaalmethodeCreditcardDao.findAll()); // werkt
+//            System.out.println(betaalmethodeContantDao.findAll()); //werkt
+//            System.out.println(beschikbareKamerDao.findAll()); // werkt
+
+            // alle updates werken behalve betaalmethode
+
+            Klant klantupdaten = new Klant(2, "Hanna", "Christa", "5473498", "hanna@gmail.com", 2344.99);
+//            klantDao.update(klantupdaten); // succes
 
 
+            Date startDatumupdate = Date.valueOf("2025-08-21"); // formaat jaar maand dag als je info wilt opslaan over ze
+            Date einddatumupdate = Date.valueOf("2025-09-21"); // formaat jaar maand d
+
+            Klant klantdiebetaaldmetcreditcard = klantDao.findById(2); // id zoeken van de klant die met crypto betaald
+            // id zoeken van een beschikbare kamer
+            BeschikbareKamer beschikbarekamertehuur2 = beschikbareKamerDao.findById(1);
+            // id zoeken van de betaalmethode die met crypto heeft betaald
+            Betaalmethode betaalmethodeviacreditcard = betaalmethodeDao.findById(3);
+
+            KamersBoeken kamersboekenupdaten = new KamersBoeken(1, startDatumupdate, einddatumupdate, 600, "creditcard", klantdiebetaaldmetcreditcard, beschikbarekamertehuur2 , betaalmethodeviacreditcard);
+//            kamersBoekenDao.update(kamersboekenupdaten); // werkt
+
+            Kamer kamerupdaten = new Kamer(1, Kamer.KamerType.normaal, 2, 600.00);
+//            kamerDao.update(kamerupdaten); // werkt
+
+            Date datumupdaten1 = Date.valueOf("2025-04-13"); // 13 april 2025
+            Klant klantveranderen = klantDao.findById(2);
+            Betaalmethode betaalmethodeupdaten = new Betaalmethode(3, Betaalmethode.MethodeType.crypto, datumupdaten1, klantveranderen );
+//            betaalmethodeDao.update(betaalmethodeupdaten); // Cannot delete or update a parent row: a foreign key constraint fails (`hotelbeheersysteem`.`betaalmethode`, CONSTRAINT `betaalmethode_ibfk_1` FOREIGN KEY (`klant_id`) REFERENCES `klant` (`id`))
+
+            BetaalmethodeCrypto betaalmethodeCryptoupdate = new BetaalmethodeCrypto(1, "etherium adress", "etherium");
+//            betaalmethodeCryptoDao.update(betaalmethodeCryptoupdate); // werkt
+
+            Date updatevervaldatum = Date.valueOf("2030-02-14");
+            BetaalmethodeCreditcard betaalmethodeCreditcardUpdaten = new BetaalmethodeCreditcard(3, "Milton Deborah", "679384859", updatevervaldatum, "345");
+//            betaalmethodeCreditcardDao.update(betaalmethodeCreditcardUpdaten); // wekt
+
+            BetaalmethodeContant updatebetaalmethodecontant = new BetaalmethodeContant(2, "EURO");
+//            betaalmethodeContantDao.update(updatebetaalmethodecontant); // werkt
+
+            Kamer kamerupdaten2 = kamerDao.findById(3);
+            BeschikbareKamer updatebeschikbarekamer = new BeschikbareKamer(1, "beschikbaar", kamerupdaten2 );
+//            beschikbareKamerDao.update(updatebeschikbarekamer); // werkt
+
+            // alle deletebyid
+//            klantDao.deleteById(2); // Cannot delete or update a parent row: a foreign key constraint fails (`hotelbeheersysteem`.`betaalmethode`, CONSTRAINT `betaalmethode_ibfk_1` FOREIGN KEY (`klant_id`) REFERENCES `klant` (`id`))
+
+//            kamersBoekenDao.deleteById(1); // Cannot delete or update a parent row: a foreign key constraint fails (`hotelbeheersysteem`.`betaalmethode`, CONSTRAINT `betaalmethode_ibfk_1` FOREIGN KEY (`klant_id`) REFERENCES `klant` (`id`))
+
+//            kamerDao.deleteById(1); // werkt
+
+//            betaalmethodeDao.deleteById(2); // Cannot delete or update a parent row: a foreign key constraint fails (`hotelbeheersysteem`.`betaalmethodecontant`, CONSTRAINT `betaalmethodecontant_ibfk_1` FOREIGN KEY (`id`) REFERENCES `betaalmethode` (`id`))
+
+//            betaalmethodeCryptoDao.deleteById(1); // werkt
+
+//            betaalmethodeCreditcardDao.deleteById(3); // werkt
+
+//            betaalmethodeContantDao.deleteById(2); // werkt
+
+//            beschikbareKamerDao.deleteById(1); // Cannot delete or update a parent row: a foreign key constraint fails (`hotelbeheersysteem`.`kamersboeken`, CONSTRAINT `kamersboeken_ibfk_2` FOREIGN KEY (`beschikbarekamer_id`) REFERENCES `beschikbarekamers` (`id`))
+
+//            klantDao.opwaarderen(1, 3333.90); // werkt perfect
 
 
-
-
-
-           // betaalmethodeCreditcardDao.save(betaalmethodeCreditcard1);
-
-
-//            betaalmethodeContantDao.save(betaalmethodeContant1); // het zegt het is succesvol gegaan maar het komt niet voor in de datase bij alle subsclassen
-
-//            betaalmethodeDao.save(betaalmethode); // die andere moeten eerst opgelsgen worden
-
-            //            klantDao.deleteById(); // nog niet geprobeert
-
+            BeschikbareKamer beschikbareKamer = beschikbareKamerDao.findById(1);
+            klantDao.kamerboeken(1, beschikbareKamer); // dit geeft problemen
 
         } catch (Exception e) {
             if (transaction.isActive()) {

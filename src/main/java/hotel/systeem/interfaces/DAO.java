@@ -1,4 +1,11 @@
 package hotel.systeem.interfaces;
 
-public interface DAO {
+import java.util.List;
+
+public interface DAO<T> {
+    void save(T entity);
+    List<T> findAll();
+    void deleteById(Integer id);
+    T findById(Integer id);
+    void update(T entity);
 }

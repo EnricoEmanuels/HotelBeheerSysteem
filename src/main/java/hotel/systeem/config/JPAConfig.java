@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 
+// Design patters Singleton
 public class JPAConfig {
     private static EntityManagerFactory emf ;
     private static EntityManager em ;

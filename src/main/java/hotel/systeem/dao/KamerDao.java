@@ -2,16 +2,40 @@ package hotel.systeem.dao;
 
 import hotel.systeem.entities.Kamer;
 import hotel.systeem.entities.KamersBoeken;
+import hotel.systeem.entities.Klant;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public class KamerDao {
+import hotel.systeem.interfaces.DAO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class KamerDao implements DAO<Kamer> {
     private EntityManager entityManager;
 
     public KamerDao(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
+    @Override
+    public List<Kamer> findAll() {
+        List<Kamer> result = new ArrayList<>();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            result = entityManager.createQuery("SELECT k FROM Kamer k").getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        }
+        System.out.println("Informatie succesvol opgehaald");
+        return result;
+    }
+
+
+    @Override
     public void save(Kamer kamer) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -26,6 +50,7 @@ public class KamerDao {
         System.out.println("Succesvol ingevoegd");
     }
 
+    @Override
     public void deleteById(Integer id) {
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -43,6 +68,7 @@ public class KamerDao {
         System.out.println("Succesvol verwijderd");
     }
 
+    @Override
     public Kamer findById(Integer id) {
         Kamer kamer = null;
         try {
@@ -54,4 +80,22 @@ public class KamerDao {
         return kamer;
 
     }
+
+    @Override
+    public void update(Kamer kamer) {
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+            entityManager.merge(kamer); // Update de klant
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace(); // error printen als het in die catch komt
+        }
+        System.out.println("Succesvol gewijzigd");
+    }
+
+
+
 }

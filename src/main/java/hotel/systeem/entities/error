@@ -1,0 +1,22 @@
+Ah, ik zie precies wat er aan de hand is — goed uitgelegd ook. Je krijgt deze foutmelding:
+
+less
+Copy
+Edit
+Cannot delete or update a parent row: a foreign key constraint fails (`hotelbeheersysteem`.`betaalmethode`, CONSTRAINT `betaalmethode_ibfk_1` FOREIGN KEY (`klant_id`) REFERENCES `klant` (`id`))
+Wat betekent deze fout?
+Je probeert waarschijnlijk een klant te updaten of verwijderen, maar er bestaat een betaalmethode die verwijst naar die klant. Omdat in je betaalmethode-tabel de klant_id een foreign key is naar de klant-tabel, beschermt de database die relatie automatisch.
+
+Kort gezegd:
+Je mag een klant niet verwijderen of aanpassen op een manier die de referentie in de betaalmethode ongeldig maakt.
+
+Waarom gebeurt dit?
+Bijvoorbeeld, stel je hebt dit in je database:
+
+klant_id	naam
+1	Enrico
+en in je betaalmethode-tabel:
+
+id	methodeType	klant_id
+1	crypto	1
+Dan betekent dit dat betaalmethode met ID 1 gekoppeld is aan klant 1. Als je klant 1 probeert te verwijderen of op een bepaalde manier te wijzigen, dan zegt MySQL: “Ho, wacht even, deze klant wordt nog gebruikt in de betaalmethode! Ik kan dit niet toelaten.”
