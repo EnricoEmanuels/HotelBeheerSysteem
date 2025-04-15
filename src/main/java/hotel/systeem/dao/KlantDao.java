@@ -1,18 +1,19 @@
 package hotel.systeem.dao;
 
-import hotel.systeem.entities.BeschikbareKamer;
-import hotel.systeem.entities.Kamer;
-import hotel.systeem.entities.KamersBoeken;
-import hotel.systeem.entities.Klant;
+import hotel.systeem.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+import hotel.systeem.entities.Betaalmethode;
+
 import hotel.systeem.interfaces.DAO;
 
-import java.sql.Date;
+//import java.sql.Date; // even
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 
 public class KlantDao implements DAO<Klant> {
     private EntityManager entityManager;
@@ -36,6 +37,23 @@ public class KlantDao implements DAO<Klant> {
         System.out.println("Informatie succesvol opgehaald");
         return result;
     }
+
+
+//    public void saveMetBetaalmethode(Klant klant, Betaalmethode betaalmethodeId) {
+//        EntityTransaction transaction = entityManager.getTransaction();
+//
+//        try {
+//            transaction.begin();
+//            entityManager.persist(klant);
+//            entityManager.persist(betaalmethodeId);
+//            transaction.commit();
+//        } catch (Exception e) {
+//            transaction.rollback();
+//            e.printStackTrace(); // deze code gaat je jouw error wijzen als het in die catch komt
+//        }
+//        System.out.println("Succesvol ingevoegd");
+//
+//    }
 
     @Override
     public void save(Klant klant) {
@@ -100,29 +118,67 @@ public class KlantDao implements DAO<Klant> {
         System.out.println("Succesvol gewijzigd");
     }
 
+    // void gezet omdat ik geen waarde retourneer naar de gebruiker die de applicatie rent
+    // als je wilt opwaardern moet ik eerst weten op welke klant ID ik moet storten daarom gevn wij het aan in de parameter de
+    // gebruiker moet het aangeven en de persoon moet ook aangeven hoeveel ze willen storten om het losjes te coderen
     public void opwaarderen(Integer id ,Double usdOpwaarderen) {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
+
+            // dit zet je altijd als je met een transactie begint zonder dit zal het nooit gaan
             transaction.begin();
+            //je zoekt naar die id die je hebt meegegeven in die parameter (id)
+            // met deze variabel van klant kan je toegang krijgen tot die eigenschappen en methodes van d classe KLANT
+            // Alleen omdat je een object ervan heb geinstantieerd in de applicatie classe als je helemaal geen object ervan
+            // had gemaakt zou het niet werken
             Klant klant = entityManager.find(Klant.class, id);
 
+//            klant.getId()
+
+            // klanten beginnen vanaf 1 na boven dus als je klant gelijk is aan null bestaat hij niet
             if (klant == null) {
                 System.out.println("klant ID: " + id + " niet gevonden");
             } else {
+                // je else is als je id wel bestaat
                 System.out.println("Klant ID: " + id + " wel gevonden");
-                double huidigeBalans = klant.getBalans(); // die variabel klant heeft toegang tot al die eigenschappen en methodes avn die klass
+
+                // die klant. met deze referentie kan je toegang hebben tot al die eigenchappen
+                // en methodes van de klasse klant die getBalans retourneert een waarde in DOUBLE
+                // dus als je het wilt opslaan in een variabel moet die variabel dezelfde datatype hebben om die
+                // waarde te accepteren en dat is DOUBLE en je geeft het een naam HUIDIGEBALANS
+                double huidigeBalans = klant.getBalans(); // die variabel klant heeft toegang tot al
+                // die eigenschappen en methodes avn die klasse KLANT
+                System.out.println("Dit is uw huidige balans : " + huidigeBalans);
+
+                // die variabelen huidigeBalans en die usdOpwaarderen hebben beide dezelfde datatypr double
+                // dus dan kan je ze optellen |||  huidigeBalans + usdOpwaarderen;
+                // maar als je het uiteindelijk wilt hergenruiken moet je het opslaan in een variabel
+                // omdat het een double retourneert moet je het opslaan in een variabel die ook dezelfde datatype heeft DOUBLE
+                // en dan roep je het nieuwBalans
                 double nieuwBalans = huidigeBalans + usdOpwaarderen;
+                // met die variabel van die andere class klant kan je toegang hebben tot al die eiegenschappen en methodes van die
+                // classe klant
+                // met die .setBalans kan je een balans plaatsen in die specifieke object
+                // en wat je zet tussen die haakjes dat ga je uiteindelijk zetten via die methode in die object.
+
                 klant.setBalans(nieuwBalans);
+
+                // die entity manager zorgt ervoor dat je kan communiceren met je database
+                //het heeft een methode merge() met deze methode kan je bestaande informatie verplaatsen met huidige
+                // of te wel nieuwe informatie || deze methode gerbuik je ook bij updaten van informatie
                 entityManager.merge(klant); // vergeet deze niet, anders wordt het niet opgeslagen
+                // sinds je met die bovenstaande regel info succesvol hebt gezet in de database kan je het
+                // gewoon halen met die referentie KLANT en die .getBalans() om die geupdate waarde te retournerne
                 System.out.println("Uw saldo na het opwaarderen: " + klant.getBalans());
 
             }
+            // dit zet je altijd nadat je iets opslaat of update (dus na je persist() / merge() zet je dit )
         transaction.commit();
 
         } catch (Exception e) {
             transaction.rollback();
-            e.printStackTrace();
+            e.printStackTrace(); // zal errors printen als je hebt
         }
         System.out.println("Opwaarderen proces afgerond");
     }
@@ -156,62 +212,138 @@ public class KlantDao implements DAO<Klant> {
 //        System.out.println("Kamerboeken proces afgerond");
 //    }
 
+
+    // ik zet void omdat ik geen waarde terug tetourneer deze mt=ethode is geschikt om kamers te boeken
+    // je moet een kamer boeken via de ID van de klamt daarom zet in het in die parameter
+    // Niet alle kamers zijn beschikbaar daarom heb ik een aparte klass gemaakt voor kamers die beschikbaar zijn
+    // dus dan moeten ze die ID invullen van die beschikbare kamer
+
     public void kamerboeken(Integer klantId, BeschikbareKamer beschikbareKamer) {
         EntityTransaction transaction = entityManager.getTransaction();
 
         try {
+            // dit is nodig om een transacttie te maken zonder dit zal het nooit lukken
             transaction.begin();
 
             // 1. Vind de klant
+
+            // je creert een variabel genaamd klant omdat je uiteindelijk die ID die je hebt gegeven in die parameter op wilt
+            // slaan in die variabel omdat het een ID is van de klasse klant kan je het alleen opslaan in een variabel die
+            // dezelfde datatype heeft van de klasse klant
             Klant klant = entityManager.find(Klant.class, klantId);
+            // je ID van klant beginnen altijd bij vanaf 1 naar boven
+            // dus als je ID gelijk is aan null dan bestaat het niet
+
             if (klant == null) {
                 System.out.println("Klant met ID " + klantId + " niet gevonden.");
-                return;
+                return; // waar je return voorkomt daar stopt je methode
             }
+            // maar even een vraag hoe het klant == null heeft gedaan in die if  als die klant niet gelijk aan null is !=
+            // dan gaat die methode wel door  want ik zie geen else ervan waar die != zal plaatsvinden
+            // of hoef ik die != niet te zetten omdat dit defensieve codering is.
 
             // 2. Vind de beschikbare kamer
-            if (beschikbareKamer == null) {
+
+            // die id die je geeft is van die beschikbare kamer maar die moet je eerst zoeken
+            // dus je zal een variabel creeren met die zelfde datatype van die beschikbare klass zodat je het erin kan opslaan
+
+            BeschikbareKamer bestaatdezebeschikbarekamer = entityManager.find(BeschikbareKamer.class, beschikbareKamer.getId());
+
+            if (bestaatdezebeschikbarekamer == null) {
                 System.out.println("Beschikbare kamer met ID " + beschikbareKamer + " niet gevonden.");
-                return;
+                return; // waar die return voorkomt daar zal die code stoppen
             }
+            // maar wat als die beschikbarekamer ID wel bestaat het het wel verder want ik zie geen else die aangeeft !=
+            // dat die id wel bestaat of gaat het gewoon door omdat dit defensieve codering is
 
             // 3. Haal de echte kamer op via kamerId van BeschikbareKamer
-            Kamer kamer = entityManager.find(Kamer.class, beschikbareKamer.getKamer().getId());
+
+            // dus hier gebruiken we die entitymanager.find() om iets te zoeken je kan niks doen zonder die entitymanager
+            // je wil in de kamer classe gaan daarom zet je Kamer.class , na je comma begint je logica
+            // die id die je hebt gegeven is die van van de beschikbarekamer dus dan zet je
+            // bestaatdezebeschikbarekamer.getKamer() om via die ID van beschikbare kameer te gaan in die classe kamer
+            // want die getKamer() retourneert die kamer eigenschap
+            // of te wel na die bestaatdezebeschikbarekamer.getKamer() ga je in die kamer classe zelf en dan doe je die getId()
+            // en die getId() is die methode in Kamer die je die ID zal geven en dan sla je deze id op in die vaiabel
+            // kamer
+            Kamer kamer = entityManager.find(Kamer.class, bestaatdezebeschikbarekamer.getKamer().getId());
             if (kamer == null) {
                 System.out.println("Kamer niet gevonden.");
                 return;
             }
 
             // 4. Check of klant genoeg geld heeft
+
+            // met die variabel van naam van klant kan je toegang hebben tot al die eignschappen en methodes van die klasse klant
+            // dus die klant.getBalans zal de huidige balans ophalen en als je huidige balans kleiner is < dan je kamer prijs per maand
+            // dan zal het een error geven je zal die prijs van die kamer krijgen door die referentie van
+            // die variabel kamer.getPrijsPerMaand()  (die getter)
             if (klant.getBalans() < kamer.getPrijsPerMaand()) {
                 System.out.println("Onvoldoende saldo. Klant heeft: $" + klant.getBalans() + ", Kamer kost: $" + kamer.getPrijsPerMaand());
                 return;
             }
 
+            // maar wat als je klant balans hoger is dan die kamer prijs per maand ik zie die else niet of
+            // wordt het automatisch gebruikt als die if clause niet werkt is dit dfensieve programmerne
+
             // 5. Trek prijs af van klantbalans
+
+            // omdat balans in double is aangegevn en prijspermaand ook in double is aangegevn kan je ze aftrekken
+            // door klant.getBalans() - kamer.getPrijsPerMaand(); die referentie klant zorgt ervoor dat je methodes en
+            // eigenschappen kan gebruiken van de klasse klant en die variabel referentie van kamer zorgt ervoor dat
+            // je methdodes kan gebruiken van de klasse kamer en dan wil je de uitkomst opslaan in een variabel nieuwebalns
+            // je moet het dezelfde datatype geven als de waarde die het retourneert
             double nieuweBalans = klant.getBalans() - kamer.getPrijsPerMaand();
+            // met de methode setBalans kan je de balans toevoegen dus dit is heel goed
+            // en wat je zet als argumenten of waardee in je setBalans() dat wordt uiteindelijk gezet via die eigenschap van die klass
+            // gezet in die methode en vervolgens in die object
             klant.setBalans(nieuweBalans);
+            // dit is om die informatie oop te daten in principe die ouwe baln te vervangen met die nieuwe balans in
+            // die database
             entityManager.merge(klant);
 
             // 6. Maak een boeking aan
+            // je zal eerst een object maken van KamersBoeken om die informatie erin te plaatsen
             KamersBoeken boeking = new KamersBoeken();
+            // je gebruikt die referentie van die kamersboeken om toegang te krijgen tot al die
+            // eigenschappen en methodes van die kamersboeken
+            // die referentie.setKlant() hierin ga je een klant id zetten in die boeking
+            // die klant referentie refereert naar die specifieke ID die werdt gegeveen in die parameter
+            //die specefieke referentie ga je opslaan via die setter in die object
             boeking.setKlant(klant);
-            boeking.setBeschikbareKamer(beschikbareKamer);
 
-//            Date vandaag = new Date();
-//            Calendar c = Calendar.getInstance();
-//            c.setTime(vandaag);
-//            c.add(Calendar.MONTH, 1);
-//            Date eindDatum = c.getTime();
-//
-//            boeking.setStartDatum(vandaag);
-//            boeking.setEindDatum(eindDatum);
+            Date vandaag = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(vandaag);
+            c.add(Calendar.MONTH, 1);
+            Date eindDatum = (Date) c.getTime();
 
-            boeking.setBetaald("Creditcaard");
+            boeking.setStartdatum(vandaag);
+            boeking.setEinddatum(eindDatum);
+
+//            Kamer totaalbedragvankamer = entityManager.find(Kamer.class, bestaatdezebeschikbarekamer.getKamer().getPrijsPerMaand());
+//            boeking.setTotaalbedrag(totaalbedragvankamer); // ik heb die eigenschappen van totaakbedrag en betaalmethode verwijderdt
+            boeking.setBeschikbareKamer(bestaatdezebeschikbarekamer);
+
+
+
+            // klant moet en betaalmethode id zetten want het is not null
+
+            Betaalmethode bestaalmethode = entityManager.find(Betaalmethode.class, klant.getBetaalmethode().getId());
+            boeking.setBetaalmethodes(bestaalmethode); //ik heb die betaalmethode eigeschap verwijderdt
+
             entityManager.persist(boeking);
 
             // 7. Verwijder de kamer uit de lijst van beschikbare kamers
-            entityManager.remove(beschikbareKamer);
+
+//            entityManager.remove(bestaatdezebeschikbarekamer);
+
+            bestaatdezebeschikbarekamer.setId(bestaatdezebeschikbarekamer.getId());
+            bestaatdezebeschikbarekamer.setBeschikbaar("Niet meer beschikbaar");
+            bestaatdezebeschikbarekamer.setKamer(kamer);
+
+            entityManager.merge(bestaatdezebeschikbarekamer);
+
 
             transaction.commit();
 

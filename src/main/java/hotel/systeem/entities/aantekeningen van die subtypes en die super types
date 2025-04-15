@@ -1,0 +1,92 @@
+Waar gaat het fout in jouw structuur?
+Het probleem zit bij deze regel in de betaalmethode-tabel:
+
+sql
+Copy
+Edit
+betaalmethode_id INT NOT NULL,
+FOREIGN KEY (betaalmethode_id) REFERENCES betaalmethode_crypto(id), betaalmethode_creditcard(id), betaalmethode_contant(id)
+Waarom dit niet werkt: In SQL kan een FOREIGN KEY maar naar één tabel tegelijk verwijzen. Dus je kan niet in één kolom verwijzen naar meerdere subtypes zoals jij probeerde. SQL ondersteunt geen "polymorphic foreign keys".
+
+
+Stap 1: Supertype 'betaalmethode'
+sql
+Copy
+Edit
+CREATE TABLE betaalmethode (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    methode ENUM('crypto', 'creditcard', 'contant') NOT NULL,
+    datum DATE NOT NULL,
+    klant_id INT NOT NULL,
+    FOREIGN KEY (klant_id) REFERENCES klant(id)
+);
+Je verwijdert dus die betaalmethode_id kolom.
+
+De id in deze tabel is de hoofdreferentie.
+
+Elke betaalmethode (crypto, contant, creditcard) heeft zijn eigen gegevens in een subtabel, maar de id blijft hetzelfde.
+
+Stap 2: Subtypes verwijzen naar het supertype (niet andersom!)
+sql
+Copy
+Edit
+
+
+
+
+CREATE TABLE betaalmethode_crypto (
+    id INT PRIMARY KEY,
+    walletadres VARCHAR(255) NOT NULL,
+    muntsoort VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id) REFERENCES betaalmethode(id)
+);
+
+CREATE TABLE betaalmethode_creditcard (
+    id INT PRIMARY KEY,
+    volledigenaam VARCHAR(255) NOT NULL,
+    kaartnummer VARCHAR(255) NOT NULL,
+    vervaldatum DATE NOT NULL,
+    cvv VARCHAR(4) NOT NULL,
+    FOREIGN KEY (id) REFERENCES betaalmethode(id)
+);
+
+CREATE TABLE betaalmethode_contant (
+    id INT PRIMARY KEY,
+    valuta VARCHAR(255) NOT NULL,
+    FOREIGN KEY (id) REFERENCES betaalmethode(id)
+);
+
+De id van elke subtype is de id van de hoofd-betaalmethode.
+
+Dit betekent dat bij het maken van een crypto-betaling:
+
+Je maakt eerst een rij in betaalmethode met methode = 'crypto'
+
+Daarna maak je een rij in betaalmethode_crypto met exact dezelfde ID
+
+Stap 3: Boeking verwijst alleen naar supertype
+sql
+Copy
+Edit
+
+
+CREATE TABLE kamersboeken (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    startdatum DATE NOT NULL,
+    einddatum DATE NOT NULL,
+    totaalbedrag DECIMAL(10, 2) NOT NULL,
+    betaald BOOLEAN NOT NULL,
+    klant_id INT NOT NULL,
+    beschibarekamer_id INT NOT NULL,
+    betaalmethode_id INT NOT NULL,
+    FOREIGN KEY (klant_id) REFERENCES klant(id),
+    FOREIGN KEY (beschibarekamer_id) REFERENCES beschikbarekamers(id),
+    FOREIGN KEY (betaalmethode_id) REFERENCES betaalmethode(id)
+);
+
+
+Deze boektabel hoeft niet te weten wat voor soort betaalmethode is gebruikt — dat lees je uit de methode kolom van betaalmethode.
+
+Als je extra info wil (zoals crypto wallet), join je met betaalmethode_crypto alleen als methode = 'crypto'.
+
+

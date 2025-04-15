@@ -17,6 +17,7 @@ import hotel.systeem.entities.Betaalmethode;
 import hotel.systeem.entities.BeschikbareKamer;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 
 public class Applicatie {
@@ -73,6 +74,7 @@ public class Applicatie {
             BetaalmethodeContant betaalmethodeContant1 = new BetaalmethodeContant(bestaandecontantgebruiker,"USD");
 
 
+//            LocalDate dag = LocalDate.valueOf();
 
             Klant bestaandeklant = klantDao.findById(2); // werkt
             Date verkoopDag = Date.valueOf("2025-04-11"); // formaat jaar maand dag als je info wilt opslaan over ze
@@ -101,7 +103,7 @@ public class Applicatie {
 
             // op deze manier ga je geen nieuwe informatie dupliceren in die andere tabellen je zoek
             // gewoon hun ID en je plaats het in de kamersboeken
-            KamersBoeken kamersBoeken1 = new KamersBoeken(startDatum, einddatum, 300.00, "crypto", klantdiebetaaldmetcrypto, beschikbarekamertehuur, betaalmethodeviacrypto);
+            KamersBoeken kamersBoeken1 = new KamersBoeken(startDatum, einddatum, klantdiebetaaldmetcrypto, beschikbarekamertehuur, betaalmethodeviacrypto);
             // je kan alleen een kamer boeken als het beschikbaar is anders heeft het geen nut
             // je kan geen kamer aangeven die bestaat je weet niet of het al bezet is daarom zet
             // of heb ik een aparte kamer gemaakt voor beschikbare kamers hier gaan alleen kamers die beschikbaar zijn
@@ -141,9 +143,9 @@ public class Applicatie {
 
 
 //            betaalmethodeCryptoDao.save(betaalmethodeCrypto1); // werkt
-
+//
 //            betaalmethodeCreditcardDao.save(betaalmethodeCreditcard1); // werkt perfect
-
+//
 //            betaalmethodeContantDao.save(betaalmethodeContant1); // werkt perfect
 
 //            System.out.println(beschikbareKamerDao.findById(1)); // werkt
@@ -186,7 +188,7 @@ public class Applicatie {
             // id zoeken van de betaalmethode die met crypto heeft betaald
             Betaalmethode betaalmethodeviacreditcard = betaalmethodeDao.findById(3);
 
-            KamersBoeken kamersboekenupdaten = new KamersBoeken(1, startDatumupdate, einddatumupdate, 600, "creditcard", klantdiebetaaldmetcreditcard, beschikbarekamertehuur2 , betaalmethodeviacreditcard);
+            KamersBoeken kamersboekenupdaten = new KamersBoeken(1, startDatumupdate, einddatumupdate, klantdiebetaaldmetcreditcard, beschikbarekamertehuur2 , betaalmethodeviacreditcard);
 //            kamersBoekenDao.update(kamersboekenupdaten); // werkt
 
             Kamer kamerupdaten = new Kamer(1, Kamer.KamerType.normaal, 2, 600.00);
@@ -231,8 +233,22 @@ public class Applicatie {
 //            klantDao.opwaarderen(1, 3333.90); // werkt perfect
 
 
+            // proberen voor die methode kamersboeken
+            Klant nieuweklant = new Klant("Donavan", "Frangie", "8584843", "donavan@gmail.com", 2000);
+//            klantDao.save(nieuweklant);
+
+            Date nieuweDatum = Date.valueOf("2025-04-13");
+            Klant idVanKlant = klantDao.findById(3);
+            Betaalmethode nieuwebetaalmethode = new Betaalmethode(Betaalmethode.MethodeType.crypto, nieuweDatum, idVanKlant);
+
+//            betaalmethodeDao.save(nieuwebetaalmethode); //
+
+            Betaalmethode betaalmethodeZettenInKlant = betaalmethodeDao.findById(5);
+            Klant klant3UpdatenMetEenBetaalmethode = new Klant(3, "Donavan", "Frangie", "8584843", "donavan@gmail.com", 2000, betaalmethodeZettenInKlant);
+//            klantDao.update(klant3UpdatenMetEenBetaalmethode); // eindelijk is het gegaan
+
             BeschikbareKamer beschikbareKamer = beschikbareKamerDao.findById(1);
-            klantDao.kamerboeken(1, beschikbareKamer); // dit geeft problemen
+            klantDao.kamerboeken(3, beschikbareKamer); // werkt
 
         } catch (Exception e) {
             if (transaction.isActive()) {

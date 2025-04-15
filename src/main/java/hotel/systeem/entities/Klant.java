@@ -33,8 +33,16 @@ public class Klant {
     @Column(name = "balans", nullable = false)
     private double balans;
 
+    @ManyToOne( optional = true, fetch = FetchType.LAZY)
+    private Betaalmethode betaalmethode;
+
     public Klant() {
 
+    }
+
+    public Klant(Integer id, Betaalmethode betaalmethode) {
+        this.id = id;
+        this.betaalmethode = betaalmethode;
     }
 
     public Klant(int id, String voornaam, String achternaam, String telefoon, String email, double balans) {
@@ -46,12 +54,31 @@ public class Klant {
         this.balans = balans;
     }
 
+    public Klant(int id, String voornaam, String achternaam, String telefoon, String email, double balans, Betaalmethode betaalmethode) {
+        this.id = id;
+        this.voornaam = voornaam;
+        this.achternaam = achternaam;
+        this.telefoon = telefoon;
+        this.email = email;
+        this.balans = balans;
+        this.betaalmethode = betaalmethode;
+    }
+
     public Klant(String voornaam, String achternaam, String telefoon, String email, double balans) {
         this.voornaam = voornaam;
         this.achternaam = achternaam;
         this.telefoon = telefoon;
         this.email = email;
         this.balans = balans;
+    }
+
+    public Klant(String voornaam, String achternaam, String telefoon, String email, double balans, Betaalmethode betaalmethode) {
+        this.voornaam = voornaam;
+        this.achternaam = achternaam;
+        this.telefoon = telefoon;
+        this.email = email;
+        this.balans = balans;
+        this.betaalmethode = betaalmethode;
     }
 
     public int getId() {
@@ -106,6 +133,14 @@ public class Klant {
         this.id = id;
     }
 
+    public Betaalmethode getBetaalmethode() {
+        return betaalmethode;
+    }
+
+    public void setBetaalmethode(Betaalmethode betaalmethode) {
+        this.betaalmethode = betaalmethode;
+    }
+
     @Override
     public String toString() {
         return "Klant{" +
@@ -115,6 +150,7 @@ public class Klant {
                 ", telefoon='" + telefoon + '\'' +
                 ", email='" + email + '\'' +
                 ", balans=" + balans +
+                ", betaalmethode=" + betaalmethode +
                 '}';
     }
 }

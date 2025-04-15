@@ -1,0 +1,30 @@
+Jouw conclusie klopt:
+"Ik heb een methode gemaakt waar ik een ID alleen eruit haal. En met die ID daar heb ik het ingevoerd. Dus dat is het probleem."
+
+Precies. Toen je eerst een Klant-object met data had aangemaakt (zoals new Klant(...)) en dat koppelde aan Betaalmethode, zag Hibernate het als een "nieuwe klant" die nog niet in de database zat (transient). Maar zodra je klantDao.findById(id) gebruikt en die instantie gebruikt, werkt alles omdat dat een "managed entity" is binnen de Hibernate-context.
+
+Antwoord op je vraag:
+"Is het omdat ik ook andere waarden heb in die object?"
+
+Ja, dat speelt een rol. Maar het echte probleem is: Hibernate kijkt naar de status van het object, niet naar de waarden erin.
+
+Als je new Klant(...) doet met exact dezelfde data, dan lijkt het dezelfde klant, maar Hibernate ziet het als een nieuwe instantie die nog geen ID heeft in de database (of nog niet managed is).
+
+Als je klantDao.findById(2) doet, dan krijg je een managed entity terug die Hibernate herkent, inclusief z’n ID, en dus mag je die gebruiken in relaties zoals met Betaalmethode.
+
+TL;DR oplossing voor de toekomst:
+Als je een relatie wil maken tussen twee entiteiten zoals Betaalmethode en Klant, dan:
+
+Eerst de gerelateerde entiteit opslaan (zoals klantDao.save(...)) óf ophalen (findById).
+
+Gebruik die exacte instantie in je nieuwe entiteit (zoals Betaalmethode).
+
+java
+Copy
+Edit
+Klant klant = klantDao.findById(2); // belangrijk
+Betaalmethode betaalmethode = new Betaalmethode(MethodeType.CRYPTO, verkoopDag, klant);
+betaalmethodeDao.save(betaalmethode); // gaat nu goed
+Als je dit soort koppelingen ook wil doen met bijv. KamersBoeken, BeschikbareKamer, Betaalmethode, etc., dan pas je exact hetzelfde patroon toe. Dit voorkomt 90% van de Hibernate errors die developers frustreren.
+
+Laat maar weten als je wilt dat ik even met je meeloop bij KamersBoeken, want ik zie dat je die constructie ook al goed aan het plannen bent.
