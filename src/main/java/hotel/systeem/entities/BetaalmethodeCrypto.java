@@ -46,6 +46,9 @@ public class BetaalmethodeCrypto {
         this.muntsoort = muntsoort;
     }
 
+    // omdat ik een one to one hier heb moet ik die hele betaalmethode entiteit plaasen
+    // in die betaalmethode crypto niet alleen die ID van betaalmethode dat is niet genoeg
+    // voor hibernate
     public BetaalmethodeCrypto(Betaalmethode betaalmethode, String walletAdres, String muntsoort) {
         this.betaalmethode = betaalmethode;
         this.walletAdres = walletAdres;

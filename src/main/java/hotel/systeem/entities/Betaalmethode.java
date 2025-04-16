@@ -98,6 +98,8 @@ public class Betaalmethode {
         return klant;
     }
 
+
+
     public void setKlant(Klant klant) {
         this.klant = klant;
     }

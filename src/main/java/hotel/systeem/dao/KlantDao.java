@@ -230,6 +230,8 @@ public class KlantDao implements DAO<Klant> {
             // je creert een variabel genaamd klant omdat je uiteindelijk die ID die je hebt gegeven in die parameter op wilt
             // slaan in die variabel omdat het een ID is van de klasse klant kan je het alleen opslaan in een variabel die
             // dezelfde datatype heeft van de klasse klant
+
+            // we hebben een nummer ingevuld dus die klantID is al aangegeven dus we hoeven naast die KlantId geen .getId() te doen
             Klant klant = entityManager.find(Klant.class, klantId);
             // je ID van klant beginnen altijd bij vanaf 1 naar boven
             // dus als je ID gelijk is aan null dan bestaat het niet
@@ -246,6 +248,10 @@ public class KlantDao implements DAO<Klant> {
 
             // die id die je geeft is van die beschikbare kamer maar die moet je eerst zoeken
             // dus je zal een variabel creeren met die zelfde datatype van die beschikbare klass zodat je het erin kan opslaan
+
+            // we hebben een variabel gezet die de nummer van die beschikbare kamer heeeft maar we moeten toch die naam
+            // gebruiken van die variabel die die ID representeert en die  getId() om die iD eruit je halen
+
 
             BeschikbareKamer bestaatdezebeschikbarekamer = entityManager.find(BeschikbareKamer.class, beschikbareKamer.getId());
 
@@ -266,6 +272,20 @@ public class KlantDao implements DAO<Klant> {
             // of te wel na die bestaatdezebeschikbarekamer.getKamer() ga je in die kamer classe zelf en dan doe je die getId()
             // en die getId() is die methode in Kamer die je die ID zal geven en dan sla je deze id op in die vaiabel
             // kamer
+
+            // wat er hier gebuert is dat we die bestaatdezebeschikbarekamer die de id representeerdt van de beschikbare kamer
+            // met dit willen wij toegang tot krijgen tot die id van kamer of die foreign key id dus we ebruiken de getter
+            // van de foreign key (getKamer())  om toegang te krijgen tot die veld of eigenschap kamer en dan doen we een getID()
+            // om die ID te krijgen van die foreign key die we hebben gekoppeld aan die beschikbare kamer !!
+            // dan hebben we dezelfde nummer avn die foreign key genomen of gerbuikt die we hebben gegeven aan die kamer die beschukbaar is
+
+            // we willen die ID van die kamer halen die beschikbaar is , aar we krijgen maar 2 dingen in die paraeter dat is die iD van
+            // klant en beschikbare kamer die id van klant is niet gekoppeld aan die kamer tabel dus we kunnen niet daar gaaan '
+            // maar die beschikbare kamer heeft wel een foreign key van kamer ering , dus we kunne via die id van beschikbare kamer
+            // toch die ID van kamer krijgen door bestaatdezebeschikbarekamer. getKamer() dir gaat ons toegang geven tot die goreign key
+            // in die beschikbare klasse en dan doen we die getID om toegang te krijgen tot die ID van die foreign key die is
+            // gekoppeld aan die beschikbare kamer. die getID is wel van die andere klasse Kamer want je kan ook doen getPrijsPerMaand
+            // getAantalBedden getKamerType dit zijn allemaal methodes van kamer
             Kamer kamer = entityManager.find(Kamer.class, bestaatdezebeschikbarekamer.getKamer().getId());
             if (kamer == null) {
                 System.out.println("Kamer niet gevonden.");
@@ -329,17 +349,26 @@ public class KlantDao implements DAO<Klant> {
 
             // klant moet en betaalmethode id zetten want het is not null
 
+            // hier hebben we een foreign key gezet in klant die refereert naar betaalmethode we hebben een klantId. getBetaalmethode
+            // dan komen we terecht in die betaalmethode klass en dan kunne we GetID doen en ander methdodes gebruiken van betaalmethode
+            // maar het is heel belangrijk om te weten dat als je in die foreign key van klant geen ID zet van klant dan ga
+            // je geen elkele waarde krijgen want uiteindelijk kan je alleen de waardes krijgen in je klant tabel die je hebt gekoppeld
+            // aand ei foreign keys in die klant tabel
+
             Betaalmethode bestaalmethode = entityManager.find(Betaalmethode.class, klant.getBetaalmethode().getId());
             boeking.setBetaalmethodes(bestaalmethode); //ik heb die betaalmethode eigeschap verwijderdt
 
             entityManager.persist(boeking);
 
-            // 7. Verwijder de kamer uit de lijst van beschikbare kamers
+            // 7. Pas de kamer uit de lijst van beschikbare kamers van beschikbaar naar niet meer beschikbaar
 
-//            entityManager.remove(bestaatdezebeschikbarekamer);
+//            entityManager.remove(bestaatdezebeschikbarekamer); // je kan het niet meer verwijderne omdat
+            // het een foreign key heeft tussen beschikbarekamer en kamer en je kan
+            // geen informatite van een foreing key verwijderne of helemaal aanpassen
+            // dus dan passen we kleine dingne toe die wel mogen
 
             bestaatdezebeschikbarekamer.setId(bestaatdezebeschikbarekamer.getId());
-            bestaatdezebeschikbarekamer.setBeschikbaar("Niet meer beschikbaar");
+            bestaatdezebeschikbarekamer.setBeschikbareKamerAlternatief(BeschikbareKamer.BeschikbareKamerAlternatief.nietbeschikbaar);
             bestaatdezebeschikbarekamer.setKamer(kamer);
 
             entityManager.merge(bestaatdezebeschikbarekamer);
@@ -357,6 +386,45 @@ public class KlantDao implements DAO<Klant> {
             System.out.println("Kamerboeken mislukt.");
         }
     }
+
+    // methode maken die een in klant die een ID invoegt en direk een Betaalmethode kan aangeven !!
+    // maar in deze methode moeten ze wel an hun gegeven stieken nemen en weer invulleb en vervolgens die betaalmethode of id aangeven
+
+    public void klantUpdatenMetBetaalmethode(Integer klantId, Integer betaalmethodeId) {
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            Klant klant = entityManager.find(Klant.class, klantId);
+            if (klant == null) {
+                System.out.println("Klant met ID " + klantId + " bestaat niet.");
+                transaction.rollback();
+                return;
+            }
+
+            Betaalmethode betaalmethode = entityManager.find(Betaalmethode.class, betaalmethodeId);
+            if (betaalmethode == null) {
+                System.out.println("Betaalmethode met ID " + betaalmethodeId + " bestaat niet.");
+                transaction.rollback();
+                return;
+            }
+
+            klant.setBetaalmethode(betaalmethode);
+            entityManager.merge(klant);
+            transaction.commit();
+
+            System.out.println("Betaalmethode succesvol gekoppeld aan klant.");
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
 
 

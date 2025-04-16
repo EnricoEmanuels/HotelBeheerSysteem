@@ -20,23 +20,34 @@ public class BeschikbareKamer {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "beschikbaar", nullable = false, length = 255)
-    private String beschikbaar;
+    // in plaats om te typen of het beschikbaar is kan ik een constante maken
+    // met enum = beschikbaar of nier meer beschikbaar
+    @Enumerated(EnumType.STRING)
+    @Column(name = "beschikbarekameralternatief", nullable = false)
+    private BeschikbareKamerAlternatief beschikbareKamerAlternatief;
+
+//    @Column(name = "beschikbaar", nullable = false, length = 255)
+//    private String beschikbaar;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "kamer_id", referencedColumnName = "id")
     private Kamer kamer;
 
+    public enum BeschikbareKamerAlternatief {
+        beschikbaar,
+        nietbeschikbaar
+    }
+
     public BeschikbareKamer() {}
 
-    public BeschikbareKamer(Integer id, String beschikbaar, Kamer kamer) {
+    public BeschikbareKamer(Integer id, BeschikbareKamerAlternatief beschikbareKamerAlternatief, Kamer kamer) {
         this.id = id;
-        this.beschikbaar = beschikbaar;
+        this.beschikbareKamerAlternatief = beschikbareKamerAlternatief;
         this.kamer = kamer;
     }
 
-    public BeschikbareKamer(String beschikbaar, Kamer kamer) {
-        this.beschikbaar = beschikbaar;
+    public BeschikbareKamer(BeschikbareKamerAlternatief beschikbareKamerAlternatief, Kamer kamer) {
+        this.beschikbareKamerAlternatief = beschikbareKamerAlternatief;
         this.kamer = kamer;
     }
 
@@ -48,13 +59,13 @@ public class BeschikbareKamer {
         this.id = id;
     }
 
-    public String isBeschikbaar() {
-        return beschikbaar;
-    }
-
-    public void setBeschikbaar(String beschikbaar) {
-        this.beschikbaar = beschikbaar;
-    }
+//    public String isBeschikbaar() {
+//        return beschikbaar;
+//    }
+//
+//    public void setBeschikbaar(String beschikbaar) {
+//        this.beschikbaar = beschikbaar;
+//    }
 
     public Kamer getKamer() {
         return kamer;
@@ -64,11 +75,19 @@ public class BeschikbareKamer {
         this.kamer = kamer;
     }
 
+    public BeschikbareKamerAlternatief getBeschikbareKamerAlternatief() {
+        return beschikbareKamerAlternatief;
+    }
+
+    public void setBeschikbareKamerAlternatief(BeschikbareKamerAlternatief beschikbareKamerAlternatief) {
+        this.beschikbareKamerAlternatief = beschikbareKamerAlternatief;
+    }
+
     @Override
     public String toString() {
         return "BeschikbareKamer{" +
                 "id=" + id +
-                ", beschikbaar=" + beschikbaar +
+                ", beschikbareKamerAlternatief=" + beschikbareKamerAlternatief +
                 ", kamer=" + kamer +
                 '}';
     }

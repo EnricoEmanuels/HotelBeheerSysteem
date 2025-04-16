@@ -95,4 +95,29 @@ public class BeschikbareKamerDao implements DAO<BeschikbareKamer> {
         System.out.println("Succesvol verwijderd");
     }
 
+    // methode creeren in beschikbare kamer om te zien welke kamer allemaal beschikbaar zijn
+    // het is geen findAll want er er in die eigenchap staat niet beschikbaar is het niet meer beschikbaar
+    // ik heb enum gebruikt in beschikbare methode en je kan kiezen tussen beschikbaar en nietbesschikbaar maar ik ben niet
+    // zeker hoe ik het moet aanreopen maar ik moet alles beschikbare kamer aanroepeb nietbeschikbaar wil ik niet
+
+    // het werkt
+    public List<BeschikbareKamer> alleBeschikbareKamers() {
+        List<BeschikbareKamer> result = new ArrayList<>();
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            result = entityManager
+                    .createQuery("SELECT b FROM BeschikbareKamer b WHERE b.beschikbareKamerAlternatief = :status", BeschikbareKamer.class)
+                    .setParameter("status", BeschikbareKamer.BeschikbareKamerAlternatief.beschikbaar)
+                    .getResultList();
+            transaction.commit();
+
+        } catch (Exception e) {
+            transaction.rollback();
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 }

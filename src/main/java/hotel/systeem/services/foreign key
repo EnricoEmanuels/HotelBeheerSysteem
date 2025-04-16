@@ -1,0 +1,59 @@
+1. Je hypothese: je dacht dat een @OneToOne of @ManyToOne met een foreign key update zou blokkeren?
+Niet helemaal waar, en dit is waarom:
+
+Je mag een rij in een tabel updaten, ook al heeft die rij een foreign key, zolang je die foreign key zelf niet probeert te breken of inconsistent te maken.
+
+In jouw geval wijzig je alleen een attribuut van die rij (beschikbaar), je breekt geen relaties.
+
+2. Waarom beschikbareKamerDao.update(...) met .merge() werkt:
+merge() is een manier voor Hibernate om een "detached entity" terug in de context te brengen en de wijzigingen door te voeren.
+
+Je hebt de BeschikbareKamer eerder al opgeslagen met save(...). Dan wijzig je lokaal een attribuut (beschikbaar naar "Niet Meer Beschikbaar") en daarna geef je hem terug aan Hibernate via .merge(...).
+
+Hibernate herkent aan de ID dat het om een bestaande rij gaat en doet gewoon een UPDATE in SQL.
+
+Dus Hibernate voert iets uit als:
+
+sql
+Copy
+Edit
+UPDATE beschikbarekamers
+SET beschikbaar = 'Niet Meer Beschikbaar'
+WHERE id = ?
+Er is geen enkele constraint die dat verhindert, zolang:
+
+De kamer_id nog steeds geldig is (bestaat in kamer)
+
+Je niets probeert te verwijderen of null te zetten op iets wat verplicht is
+
+3. Waarom dacht je dat het niet zou werken?
+Waarschijnlijk omdat in veel tutorials en documentatie gezegd wordt:
+
+“Je kan geen rij verwijderen of updaten als een andere rij ervan afhankelijk is via een foreign key.”
+
+Maar dat geldt alleen bij DELETE of het wijzigen van de foreign key zelf, niet bij het updaten van gewone attributen. Dus:
+
+Verwijderen van Kamer zou falen zolang BeschikbareKamer er nog naar wijst (tenzij je cascade gebruikt)
+
+Maar beschikbaar aanpassen? Helemaal geen probleem!
+
+4. Bonus: waarom dit goed design is van jou
+Je doet het op een slimme manier:
+
+Je verwijdert de BeschikbareKamer niet (wat potentieel andere referenties zou breken),
+
+Maar je verandert gewoon zijn status — dat is de juiste aanpak in real-life systemen.
+
+Je laat eigenlijk een soort "soft delete" gebeuren — net als status = 'Inactive' in sommige systemen. Dat is goed schaalbaar en traceerbaar.
+
+Conclusie:
+Je implementatie is correct, veilig en slim.
+Hibernate heeft geen reden om te klagen, want:
+
+Je wijzigt geen foreign key relatie
+
+Je gebruikt merge() netjes via je DAO
+
+Alles is netjes met transacties afgedekt
+
+Als je wil, kan ik ook even samen met je kijken of we het woord "Niet Meer Beschikbaar" als constante kunnen definiëren, zodat je typo's vermijdt — en als extra bonus wat optimalisaties doen in die methode nieuweKamerCreerenEnDirekBoeken.

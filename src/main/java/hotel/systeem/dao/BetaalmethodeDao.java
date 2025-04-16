@@ -97,4 +97,34 @@ public class BetaalmethodeDao implements DAO<Betaalmethode> {
         System.out.println("Succesvol verwijderd");
     }
 
+    // methode creeren om te kijken welke betalingsmethode de klant allemaal heeeft
+    // dus ik ben momenteel in die betaalmethdoe classe en ik will weten als een persoon die ID
+    // van een klant geeft welke methodes deze klant heeft gerbuikt om te betalen bij methode
+    // ik heb een enum gebruikt voor crypto, contant , creditcaard als die id van die kaltn voorkomt bij
+    // verschillende methodes can moet ik ze zieb
+    public List<Betaalmethode> alleBetaalmethodesVanKlant(Integer klantId) {
+        List<Betaalmethode> result = new ArrayList<>();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            transaction.begin();
+
+            result = entityManager.createQuery(
+                            "SELECT b FROM Betaalmethode b WHERE b.klant.id = :klantId", Betaalmethode.class)
+                    .setParameter("klantId", klantId)
+                    .getResultList();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+
 }

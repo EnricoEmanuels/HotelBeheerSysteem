@@ -1,5 +1,6 @@
 package hotel.systeem.dao;
 
+import hotel.systeem.entities.BeschikbareKamer;
 import hotel.systeem.entities.Kamer;
 import hotel.systeem.entities.KamersBoeken;
 import hotel.systeem.entities.Klant;
@@ -95,6 +96,7 @@ public class KamerDao implements DAO<Kamer> {
         }
         System.out.println("Succesvol gewijzigd");
     }
+
 
 
 
