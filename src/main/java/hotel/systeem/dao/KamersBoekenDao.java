@@ -2,6 +2,7 @@ package hotel.systeem.dao;
 
 import hotel.systeem.entities.KamersBoeken;
 import hotel.systeem.entities.Klant;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 

@@ -1,16 +1,18 @@
 package hotel.systeem.entities;
 
-import jakarta.persistence.*;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import java.util.LinkedHashSet;
+import hotel.systeem.entities.KamersBoeken;
 
+
+
+
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
-import hotel.systeem.entities.KamersBoeken;
 
 @Entity
 @Table(name = "betaalmethode" , schema = "hotelbeheersysteem")

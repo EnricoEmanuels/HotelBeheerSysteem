@@ -1,7 +1,5 @@
 package hotel.systeem.entities;
 
-import jakarta.persistence.*;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -10,6 +8,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "beschikbarekamers" , schema = "hotelbeheersysteem")

@@ -1,6 +1,5 @@
 package hotel.systeem.entities;
 
-import jakarta.persistence.*;
 import hotel.systeem.entities.Betaalmethode;
 
 import org.hibernate.annotations.OnDelete;
@@ -12,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "betaalmethodecrypto" , schema = "hotelbeheersysteem")
@@ -40,6 +40,8 @@ public class BetaalmethodeCrypto {
 
     public BetaalmethodeCrypto() {}
 
+    // dit is voor het updaten van informatie
+    
     public BetaalmethodeCrypto(Integer id, String walletAdres, String muntsoort) {
         this.id = id;
         this.walletAdres = walletAdres;
@@ -49,6 +51,7 @@ public class BetaalmethodeCrypto {
     // omdat ik een one to one hier heb moet ik die hele betaalmethode entiteit plaasen
     // in die betaalmethode crypto niet alleen die ID van betaalmethode dat is niet genoeg
     // voor hibernate
+    // voor het invoegen van informatie
     public BetaalmethodeCrypto(Betaalmethode betaalmethode, String walletAdres, String muntsoort) {
         this.betaalmethode = betaalmethode;
         this.walletAdres = walletAdres;

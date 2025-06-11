@@ -42,16 +42,16 @@ public class Applicatie {
 
             Date verkoopdag3 = Date.valueOf("2025-4-15");
             HotelBoekenService hotelBoekenService = new HotelBoekenService(klantDao, betaalmethodeDao, betaalmethodeCryptoDao);
-//            hotelBoekenService.hotelBoekenMetCrypto("Damani", "Resida", "7549834", "damani@amil.com", 4444.00, Betaalmethode.MethodeType.crypto, verkoopdag3, "solana adres", "SOLONA"); // perfect
+            hotelBoekenService.hotelBoekenMetCrypto("Damani", "Resida", "7549834", "damani@amil.com", 4444.00, Betaalmethode.MethodeType.crypto, verkoopdag3, "solana adres", ); // perfect
 
             HotelBoekenService hotelBoekenService1 = new HotelBoekenService(klantDao, betaalmethodeDao, betaalmethodeCreditcardDao);
             Date verkoopdag4 = Date.valueOf("2025-07-22");
             Date vervaldatum5 = Date.valueOf("2029-07-22");
-//            hotelBoekenService1.hotelBoekenMetCreditcard("Keith", "Graanoost", "86588945", "keith@gmail.com", 6000.40, Betaalmethode.MethodeType.creditcard, verkoopdag4, "Keith Graanoost", "745834884", vervaldatum5, "456"); // perfect
+            hotelBoekenService1.hotelBoekenMetCreditcard("Keith", "Graanoost", "86588945", "keith@gmail.com", 6000.40, Betaalmethode.MethodeType.creditcard, verkoopdag4, "Keith Graanoost", "745834884", vervaldatum5,); // perfect
 
             HotelBoekenService hotelBoekenService2 = new HotelBoekenService(klantDao, betaalmethodeDao, betaalmethodeContantDao);
             Date verkoopdag5 = Date.valueOf("2025-09-11");
-//            hotelBoekenService2.hotelBoekenMetContant("ramlal", "shiva", "7485853", "ramlal@gmail.com", 2323.90, Betaalmethode.MethodeType.contant, verkoopdag5, "USD" ); // nog afmaken
+            hotelBoekenService2.hotelBoekenMetContant("ramlal", "shiva", "7485853", "ramlal@gmail.com", 2323.90, Betaalmethode.MethodeType.contant, verkoopdag5, ); // nog afmaken
 
             HotelBoekenService hotelBoekenService3 = new HotelBoekenService(klantDao, betaalmethodeDao, kamerDao, beschikbareKamerDao, kamersBoekenDao);
             Date verkoopdag6 = Date.valueOf("2025-04-17");
@@ -189,7 +189,7 @@ public class Applicatie {
 //            System.out.println(klantDao.findById(2)); // werkt
 //            System.out.println(kamersBoekenDao.findById(1)); // werkt ik moest die tostring aanpassen bij die foreign keys
 //            System.out.println(kamerDao.findById(3)); // werkt
-//            System.out.println(betaalmethodeDao.findById(3)); // perfect
+//            System.out.println(betaalmethodeDao.findById(4)); // perfect
 //            System.out.println(betaalmethodeCryptoDao.findById(1)); // werkt
 //            System.out.println(betaalmethodeCreditcardDao.findById(3)); //werkt
 //            System.out.println(betaalmethodeContantDao.findById(2)); // werkt
@@ -298,6 +298,8 @@ public class Applicatie {
 
 
 //            klantDao.klantUpdatenMetBetaalmethode(1, 2); // het werkt
+
+//            System.out.println(klantDao.findKlantOpBetaalmethodeId(4));
 
         } catch (Exception e) {
             if (transaction.isActive()) {

@@ -1,6 +1,8 @@
 package hotel.systeem.dao;
 
 import hotel.systeem.entities.*;
+
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
@@ -38,6 +40,25 @@ public class KlantDao implements DAO<Klant> {
         return result;
     }
 
+//    public List<Klant> findKlantOpBetaalmethodeId(Integer betaalmethodeId) {
+//        List<Klant> result = new ArrayList<>();
+//        EntityTransaction transaction = entityManager.getTransaction();
+//        try {
+//            transaction.begin();
+//
+//            result =  entityManager.createQuery(
+//                            "SELECT k FROM Klant k WHERE k.betaalmethode.id = :betaalmethodeId",
+//                            Klant.class
+//                    ).setParameter("betaalmethodeId", betaalmethodeId)
+//                    .setMaxResults(1)
+//                    .getSingleResult();
+//            transaction.commit();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null; // geen klant met deze betaalmethode
+//        }
+//        return result;
+//    }
 
 //    public void saveMetBetaalmethode(Klant klant, Betaalmethode betaalmethodeId) {
 //        EntityTransaction transaction = entityManager.getTransaction();
