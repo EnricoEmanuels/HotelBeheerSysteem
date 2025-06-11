@@ -1,0 +1,38 @@
+image: maven:3.8.7-eclipse-temurin-17
+
+stages:
+  - build
+  - test
+  - run
+
+variables:
+  MAVEN_CLI_OPTS: "--batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+cache:
+  paths:
+    - .m2/repository/
+
+build-job:
+  stage: build
+  script:
+    - echo "📦 Compiling the code..."
+    - mvn $MAVEN_CLI_OPTS compile
+
+unit-test-job:
+  stage: test
+  script:
+    - echo "🧪 Running unit tests (none yet)..."
+    - mvn $MAVEN_CLI_OPTS test
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+
+run-job:
+  stage: run
+  script:
+    - echo "🚀 Running the Java application..."
+    - mvn $MAVEN_CLI_OPTS exec:java -Dexec.mainClass="hotel.systeem.app.Applicatie"
